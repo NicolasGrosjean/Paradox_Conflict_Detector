@@ -42,7 +42,7 @@ python -m unittest discover
 ## Future
 
 - Put mod repository directory and exception files as parameters
-- Compute conflicts on a preset (list of mods)
+- Compute conflicts on a playset (list of mods)
 - Compute conflict detection files and not only on file names.
 
 ## License
