@@ -4,7 +4,7 @@ import sqlite3
 def read_playsets(db_path: str) -> dict:
     mods = dict()
     for raw_mod in read_sqlite_data(db_path, "mods"):
-        mods[raw_mod[0]] = raw_mod[5]
+        mods[raw_mod[0]] = {'name': raw_mod[5], 'mod_file_name': raw_mod[3].split('/')[-1]}
     playsets = dict()
     for raw_playset in read_sqlite_data(db_path, "playsets"):
         playsets[raw_playset[0]] = dict()
@@ -34,7 +34,7 @@ def read_sqlite_data(db_path: str, table: str) -> list:
 
 if __name__ == "__main__":
     playsets = read_playsets(
-        "D:\Documents\Paradox Interactive\Crusader Kings III\launcher-v2.sqlite"
+        "D:\\Documents\\Paradox Interactive\\Crusader Kings III\\launcher-v2.sqlite"
     )
     for playset in playsets.values():
         print(playset['name'])

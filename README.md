@@ -46,6 +46,25 @@ For example
 python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings III\mod" "config\file_exception.txt" -filtering_mod_path "config\my_mod_list.txt"
 ```
 
+#### Compute conflicts on a Paradox Launcher playset
+
+In Paradox launcher we can define a playset: a list of mods.
+
+For this feature you need to install the sqlite3 package :
+
+```
+pip install sqlite3
+```
+
+You can specify a playset to compute conflicts only on these mods by adding `-playset_name "<playset_name>"` to the command line.
+The quotes are necessary to manage spaces in playset name.
+
+For example
+
+```
+python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings III\mod" "config\file_exception.txt" -playset_name "Historical Playset"
+```
+
 #### Set output in a file
 
 You can put the output in a file by this way by redirecting the standard output with a *>*. For example
@@ -67,7 +86,6 @@ python -m unittest discover
 
 ## Future
 
-- Compute conflicts on a playset (list of mods)
 - Compute conflict detection files and not only on file names.
 
 ## License

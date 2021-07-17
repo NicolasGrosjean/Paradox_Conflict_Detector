@@ -21,6 +21,11 @@ def get_args():
         type=str,
         help="Path of a file containing at each line a mod name in which conflicts will be computed",
     )
+    parser.add_argument(
+        "-playset_name",
+        type=str,
+        help="Name of playset saved in Paradox launcher to compute conflicts only on these mods. Can be chained with filtering_mod_path",
+    )
     return parser.parse_args()
 
 
@@ -61,22 +66,34 @@ def list_mod_files(mod_path: str) -> set[str]:
     return res
 
 
-def index_mod_by_files(mod_repo_path: str, filtering_mod: list[str]) -> dict:
+def index_mod_by_files(
+    mod_repo_path: str,
+    filtering_mod_names: list[str],
+    filtering_mod_files: list[str],
+) -> dict:
     """
     Return dictionary with file names as keys, and list of mod names (from mod_repo_path) which have this file.
-    Mods are filtered by their names in the list if the list is not empty.
+    Mods are filtered by their names or path in the list if the list is not empty.
     """
     mods_by_file = dict()
-    filtering = len(filtering_mod) > 0
+    filtering_names = len(filtering_mod_names) > 0
+    filtering_files = len(filtering_mod_files) > 0
     for mod_desc_file in os.listdir(mod_repo_path):
         if not mod_desc_file.endswith("mod"):
             continue
         metadata = read_mod_descriptor_file(os.path.join(mod_repo_path, mod_desc_file))
-        if filtering:
-            if metadata.name not in filtering_mod:
+        if filtering_names:
+            if metadata.name not in filtering_mod_names:
+                if mod_desc_file in filtering_mod_files:
+                    filtering_mod_files.remove(mod_desc_file)
                 continue
             else:
-                filtering_mod.remove(metadata.name)
+                filtering_mod_names.remove(metadata.name)
+        if filtering_files:
+            if mod_desc_file not in filtering_mod_files:
+                continue
+            else:
+                filtering_mod_files.remove(mod_desc_file)
         mod_files = list_mod_files(
             os.path.join(mod_repo_path, metadata.path[4:])
             if metadata.path.startswith("mod/")
@@ -86,13 +103,22 @@ def index_mod_by_files(mod_repo_path: str, filtering_mod: list[str]) -> dict:
             if file not in mods_by_file:
                 mods_by_file[file] = []
             mods_by_file[file].append(metadata.name)
-    if len(filtering_mod) > 0:
-        print(f"ERROR : {len(filtering_mod)} mods not found : {filtering_mod}\n\n")
+    if len(filtering_mod_names) > 0:
+        print(
+            f"ERROR : {len(filtering_mod_names)} mods not found : {filtering_mod_names}\n\n"
+        )
+    if len(filtering_mod_files) > 0:
+        print(
+            f"ERROR : {len(filtering_mod_files)} mods not found : {filtering_mod_files}\n\n"
+        )
     return mods_by_file
 
 
 def detect_conflicts(
-    mod_repo_path: str, file_exceptions=NORMAL_DUPLICATED_FILES, filtering_mod=[]
+    mod_repo_path: str,
+    file_exceptions=NORMAL_DUPLICATED_FILES,
+    filtering_mod_names=[],
+    filtering_mod_files=[],
 ) -> dict:
     """
     Return dictionary according this example: { mod1: { mod2: ['file1', 'file2], mod3: ['file42']}}
@@ -100,7 +126,9 @@ def detect_conflicts(
     Returned files are not in file_exceptions
     """
     conflicts_by_mod = dict()
-    mods_by_file = index_mod_by_files(mod_repo_path, filtering_mod)
+    mods_by_file = index_mod_by_files(
+        mod_repo_path, filtering_mod_names, filtering_mod_files
+    )
     for file, mods in mods_by_file.items():
         if len(mods) > 1 and file not in file_exceptions:
             for mod in mods:
@@ -118,12 +146,30 @@ def detect_conflicts(
 if __name__ == "__main__":
     args = get_args()
     file_exceptions = read_param_file(args.file_exception_path)
+    filtering_mod_names = []
+    filtering_mod_files = []
     if args.filtering_mod_path is not None:
-        filtering_mod = read_param_file(args.filtering_mod_path)
-    else:
-        filtering_mod = []
+        filtering_mod_names = read_param_file(args.filtering_mod_path)
+    if args.playset_name is not None:
+        from read_playset import read_playsets  # Import here to avoid dependency in sqlite3 if not needed
+        playsets = read_playsets(
+            os.path.join(args.mod_repo_path, "..", "launcher-v2.sqlite")
+        ).values()
+        playset_found = False
+        for playset in playsets:
+            if args.playset_name == playset["name"]:
+                for mod in playset["mods"]:
+                    filtering_mod_files.append(mod['mod_file_name'])
+                playset_found = True
+                break
+        if not playset_found:
+            print(f"ERROR: playset {args.playset_name} not found")
+            exit(0)
     conflicts_by_mod = detect_conflicts(
-        args.mod_repo_path, file_exceptions, filtering_mod
+        args.mod_repo_path,
+        file_exceptions,
+        filtering_mod_names,
+        filtering_mod_files
     )
     for mod in conflicts_by_mod:
         print(f"Conflicts with {mod}:")

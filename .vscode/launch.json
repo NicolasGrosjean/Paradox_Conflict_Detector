@@ -18,7 +18,9 @@
             "program": "${workspaceFolder}\\src\\detect_conflicts.py",
             "args": [
                 "D:\\Documents\\Paradox Interactive\\Crusader Kings III\\mod",
-                "${workspaceFolder}\\config\\file_exception.txt"
+                "${workspaceFolder}\\config\\file_exception.txt",
+                "-playset_name",
+                "Immersion"
             ],
         }
     ]
