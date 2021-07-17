@@ -19,13 +19,23 @@ Edit lines 80 and 81 of *src/detect_conflicts.py* to specify mod repository dire
 Run the following command to print the conflicts:
 
 ```
-python src/detect_conflicts.py
+python src/detect_conflicts.py "<mod_repo_path>" -file_exception_path "<file_exception_path>"
+```
+
+With *mod_repo_path* the path of the directory containing all the mods,
+*file_exception_path* the path of a file containing at each line a file name which can duplicated between mods.
+The quotes are necessary to manage spaces in directory names.
+
+For example
+
+```
+python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings III\mod" -file_exception_path "config\file_exception.txt"
 ```
 
 You can put the output in a file by this way:
 
 ```
-python src/detect_conflicts.py > conflicts.txt
+python src/detect_conflicts.py "<mod_repo_path>" -file_exception_path "<file_exception_path>" > conflicts.txt
 ```
 
 ## Tests
@@ -41,7 +51,6 @@ python -m unittest discover
 
 ## Future
 
-- Put mod repository directory and exception files as parameters
 - Compute conflicts on a playset (list of mods)
 - Compute conflict detection files and not only on file names.
 

@@ -1,4 +1,22 @@
+import argparse
 import os
+
+
+def get_args():
+    parser = argparse.ArgumentParser(
+        description="Detect conflicts between Paradox mods"
+    )
+    parser.add_argument(
+        "mod_repo_path",
+        type=str,
+        help="Path of the directory containing all the mods",
+    )
+    parser.add_argument(
+        "-file_exception_path",
+        type=str,
+        help="Path of a file containing at each line a file name which can duplicated between mods",
+    )
+    return parser.parse_args()
 
 
 class ModMetadata:
@@ -76,9 +94,17 @@ def detect_conflicts(
 
 
 if __name__ == "__main__":
+    args = get_args()
+    if args.file_exception_path is not None:
+        with open(args.file_exception_path, "r") as f:
+            file_exceptions = f.readlines()
+        for i in range(len(file_exceptions)):
+            file_exceptions[i] = file_exceptions[i].replace("\n", "")
+    else:
+        file_exceptions = NORMAL_DUPLICATED_FILES
     conflicts_by_mod = detect_conflicts(
-        "D:\Documents\Paradox Interactive\Crusader Kings III\mod",
-        ["descriptor.mod", "thumbnail.png", "description.txt"],
+        args.mod_repo_path,
+        file_exceptions,
     )
     for mod in conflicts_by_mod:
         print(f"Conflicts with {mod}:")

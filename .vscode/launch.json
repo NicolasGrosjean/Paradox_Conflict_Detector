@@ -10,6 +10,17 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Detect conflicts",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\src\\detect_conflicts.py",
+            "args": [
+                "D:\\Documents\\Paradox Interactive\\Crusader Kings III\\mod",
+                "-file_exception_path",
+                "${workspaceFolder}\\config\\file_exception.txt"
+            ],
         }
     ]
 }

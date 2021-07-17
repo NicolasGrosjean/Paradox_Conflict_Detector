@@ -1,0 +1,10 @@
+descriptor.mod
+thumbnail.png
+description.txt
+_character_interactions.info
+_doctrines.info
+_governments.info
+_holdings.info
+_buildings.info
+_laws.info
+_lease_contracts.info
