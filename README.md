@@ -14,12 +14,13 @@ I recommend you to install a Python environment with conda or virtualenv.
 
 ## Usage
 
-Edit lines 80 and 81 of *src/detect_conflicts.py* to specify mod repository directory and files which can be duplicated in mods.
+
+### Basic Usage
 
 Run the following command to print the conflicts:
 
 ```
-python src/detect_conflicts.py "<mod_repo_path>" -file_exception_path "<file_exception_path>"
+python src/detect_conflicts.py "<mod_repo_path>" "<file_exception_path>"
 ```
 
 With *mod_repo_path* the path of the directory containing all the mods,
@@ -29,13 +30,28 @@ The quotes are necessary to manage spaces in directory names.
 For example
 
 ```
-python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings III\mod" -file_exception_path "config\file_exception.txt"
+python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings III\mod" "config\file_exception.txt"
 ```
 
-You can put the output in a file by this way:
+### Advanced Usage
+
+#### Compute conflicts on a subset of mods
+
+You can specify a list of mods on which compute conflicts by adding `-filtering_mod_path "<filtering_mod_path>"` to the command line.
+With *file_exception_path* the path of a file containing at each line a mod name in which conflicts will be computed.
+
+For example
 
 ```
-python src/detect_conflicts.py "<mod_repo_path>" -file_exception_path "<file_exception_path>" > conflicts.txt
+python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings III\mod" "config\file_exception.txt" -filtering_mod_path "config\my_mod_list.txt"
+```
+
+#### Set output in a file
+
+You can put the output in a file by this way by redirecting the standard output with a *>*. For example
+
+```
+python src/detect_conflicts.py "<mod_repo_path>" > conflicts.txt
 ```
 
 ## Tests

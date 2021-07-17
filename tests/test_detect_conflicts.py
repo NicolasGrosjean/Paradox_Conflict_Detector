@@ -36,7 +36,7 @@ class TestDetectConflicts(unittest.TestCase):
         self.assertTrue("descriptor.mod" in files)
 
     def test_index_mod_by_files(self):
-        mods_by_file = index_mod_by_files(self.data_dir)
+        mods_by_file = index_mod_by_files(self.data_dir, [])
         self.assertEqual(4, len(mods_by_file))
         self.assertTrue("dummy.txt" in mods_by_file)
         self.assertEqual(1, len(mods_by_file["dummy.txt"]))
@@ -52,8 +52,7 @@ class TestDetectConflicts(unittest.TestCase):
         self.assertEqual("My Monastery 2", mods_by_file["descriptor.mod"][0])
         self.assertEqual("-My Monastery- GIT", mods_by_file["descriptor.mod"][1])
 
-    def test_detect_conflicts(self):
-        conflicts = detect_conflicts(self.data_dir)
+    def assert_detect_conflicts(self, conflicts: dict):
         self.assertEqual(2, len(conflicts))
         self.assertTrue("My Monastery 2" in conflicts)
         self.assertTrue("-My Monastery- GIT" in conflicts["My Monastery 2"])
@@ -67,6 +66,16 @@ class TestDetectConflicts(unittest.TestCase):
         self.assertEqual(
             "dummy2.txt", conflicts["-My Monastery- GIT"]["My Monastery 2"][0]
         )
+
+    def test_detect_conflicts(self):
+        self.assert_detect_conflicts(detect_conflicts(self.data_dir))
+
+    def test_detect_conflicts_two_mods(self):
+        self.assert_detect_conflicts(detect_conflicts(self.data_dir, filtering_mod=["My Monastery 2", "-My Monastery- GIT"]))
+
+    def test_detect_conflicts_one_mod(self):
+        conflicts = detect_conflicts(self.data_dir, filtering_mod=["My Monastery 2"])
+        self.assertEqual(0, len(conflicts))
 
 
 if __name__ == "__main__":
