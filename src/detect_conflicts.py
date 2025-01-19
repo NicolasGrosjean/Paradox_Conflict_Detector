@@ -130,7 +130,7 @@ def detect_conflicts(
         mod_repo_path, filtering_mod_names, filtering_mod_files
     )
     for file, mods in mods_by_file.items():
-        if len(mods) > 1 and file not in file_exceptions:
+        if len(mods) > 1 and file.lower() not in file_exceptions:
             for mod in mods:
                 if mod not in conflicts_by_mod:
                     conflicts_by_mod[mod] = dict()
