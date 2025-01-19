@@ -1,11 +1,5 @@
 # Paradox Conflict Detector
 
-## Fork
-
-Fixed issue with uncode encoding https://github.com/NicolasGrosjean/Paradox_Conflict_Detector/issues/1
-
-Fixed common files being detected as conflicts (readme.md, changelog.md)
-
 ## Motivation
 
 There are a lot of mods and it is difficult to know which mod is compatible with which one.
