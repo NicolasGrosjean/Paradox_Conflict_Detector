@@ -174,5 +174,7 @@ if __name__ == "__main__":
     for mod in conflicts_by_mod:
         print(f"Conflicts with {mod}:")
         for mod2 in conflicts_by_mod[mod]:
-            print(f"- {mod2}: {conflicts_by_mod[mod][mod2]}")
+            to_print = f"- {mod2}: {conflicts_by_mod[mod][mod2]}"
+            print(to_print.encode('utf8'))  # fixes potential issue in windows terminal with failing to encode certain characters
         print("\n")
+
