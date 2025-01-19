@@ -1,5 +1,11 @@
 # Paradox Conflict Detector
 
+## Fork
+
+Fixed issue with uncode encoding https://github.com/NicolasGrosjean/Paradox_Conflict_Detector/issues/1
+
+Fixed common files being detected as conflicts (readme.md, changelog.md)
+
 ## Motivation
 
 There are a lot of mods and it is difficult to know which mod is compatible with which one.
@@ -70,7 +76,7 @@ python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings 
 You can put the output in a file by this way by redirecting the standard output with a *>*. For example
 
 ```
-python src/detect_conflicts.py "<mod_repo_path>" > conflicts.txt
+python src/detect_conflicts.py "<mod_repo_path>" > conflicts.rtf
 ```
 
 ## Tests
