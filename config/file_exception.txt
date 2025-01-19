@@ -1,6 +1,10 @@
 descriptor.mod
 thumbnail.png
 description.txt
+readme.md
+README.md
+changelog.md
+CHANGELOG.md
 _character_interactions.info
 _doctrines.info
 _governments.info
