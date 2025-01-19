@@ -70,7 +70,7 @@ python src/detect_conflicts.py "D:\Documents\Paradox Interactive\Crusader Kings 
 You can put the output in a file by this way by redirecting the standard output with a *>*. For example
 
 ```
-python src/detect_conflicts.py "<mod_repo_path>" > conflicts.txt
+python src/detect_conflicts.py "<mod_repo_path>" > conflicts.rtf
 ```
 
 ## Tests
