@@ -1,6 +1,11 @@
 import argparse
 import os
+import sys
+import io
 
+# fixing issue with Windows Terminal encoding wherein the script may break if it can't encode certain characters
+# such as \u03c0
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), sys.stdout.encoding, 'replace')
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -34,7 +39,7 @@ class ModMetadata:
     path: str
 
 
-NORMAL_DUPLICATED_FILES = ["descriptor.mod", "thumbnail.png"]
+NORMAL_DUPLICATED_FILES = ["descriptor.mod", "thumbnail.png", 'readme.md', 'changelog.md', '.gitignore', '.gitattributes']
 
 
 def read_param_file(path: str) -> list[str]:
@@ -174,7 +179,5 @@ if __name__ == "__main__":
     for mod in conflicts_by_mod:
         print(f"Conflicts with {mod}:")
         for mod2 in conflicts_by_mod[mod]:
-            to_print = f"- {mod2}: {conflicts_by_mod[mod][mod2]}"
-            print(to_print.encode('utf8'))  # fixes potential issue in windows terminal with failing to encode certain characters
+            print(f"- {mod2}: {conflicts_by_mod[mod][mod2]}")
         print("\n")
-
