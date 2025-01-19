@@ -2,9 +2,8 @@ descriptor.mod
 thumbnail.png
 description.txt
 readme.md
-README.md
 changelog.md
-CHANGELOG.md
+notes.txt
 _character_interactions.info
 _doctrines.info
 _governments.info
@@ -12,3 +11,5 @@ _holdings.info
 _buildings.info
 _laws.info
 _lease_contracts.info
+.gitattributes
+.gitignore
